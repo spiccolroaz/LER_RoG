@@ -72,7 +72,7 @@ scaling_factors:                                # scaling factors to apply to me
 model_parameters:                               # Parameters and scaling factors based on calibration in Moore et al. (2020), LakeEnsemblR: An R package that facilitates ensemble modelling of lakes.
    FLake:                                       # FLake specific parameters
       fetch_lk: 2000                            # Typical wind fetch [m]
-      c_relax_C: 0.008672142
+      c_relax_C: 0.26891 #0.008672142
    GLM:                                         # GLM specific parameters
       bsn_len: 3678                             # Length of the lake basin, at crest height [m; default=NULL]
       bsn_wid: 944                              # Width of the lake basin, at crest height [m; default=NULL]

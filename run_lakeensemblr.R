@@ -34,20 +34,20 @@ print(best_par)
 
 # > print(best_par) #2023-5-31 3:16 PM CDT
 # $FLake
-# wind_speed         swr   c_relax_C 
-# 1.244507421 1.099784772 0.008672142 
-# 
+# wind_speed         swr   c_relax_C
+# 1.244507421 1.099784772 0.008672142
+#
 # $GLM
-# wind_speed                 swr mixing/coef_mix_hyp 
-# 1.040228            1.073248            0.826737 
-# 
+# wind_speed                 swr mixing/coef_mix_hyp
+# 1.040228            1.073248            0.826737
+#
 # $GOTM
-# wind_speed              swr turb_param/k_min 
-# 1.247361e+00     1.099835e+00     2.869447e-06 
-# 
+# wind_speed              swr turb_param/k_min
+# 1.247361e+00     1.099835e+00     2.869447e-06
+#
 # $Simstrat
-# wind_speed          swr     a_seiche 
-# 1.0862895980 0.9847077065 0.0008157647 
+# wind_speed          swr     a_seiche
+# 1.0862895980 0.9847077065 0.0008157647
 
 # Load libraries for post-processing
 library(gotmtools)
@@ -75,7 +75,7 @@ p1 <- plot_heatmap(ncdf)
 p1
 # Change the theme and increase text size for saving
 p1 <- p1 +
-  theme_classic(base_size = 24) + 
+  theme_classic(base_size = 24) +
   scale_colour_gradientn(limits = c(0, 21),
                          colours = rev(RColorBrewer::brewer.pal(11, "Spectral")))
 # Save as a png file
@@ -104,7 +104,7 @@ library(tidyr)
 
 
 qual_fun <- function(O, P){
-  
+
   # Arguments:
   #^^^^^^^^^^
   # O: observed values
@@ -119,26 +119,26 @@ qual_fun <- function(O, P){
   P <- P[id]
   # rmse
   rmse <- sqrt(mean((O - P)^2, na.rm = TRUE))
-  
+
   # nash sutcliff
   nse <- 1 - sum((O - P)^2, na.rm = TRUE)/sum((O - mean(O, na.rm=TRUE))^2, na.rm = TRUE)
-  
+
   # pearson corelation coef
   r <- sum((O - mean(O, na.rm = TRUE))*(P - mean(P, na.rm = TRUE)),
            na.rm = TRUE)/sqrt(sum((O - mean(O, na.rm = TRUE))^2, na.rm = TRUE)*
                                 sum((P - mean(P, na.rm = TRUE))^2, na.rm = TRUE))
-  
+
   # bias
   bias <- mean((P - O), na.rm = TRUE)
-  
+
   # mean absolute error
   mae <- mean(abs(O - P), na.rm = TRUE)
-  
+
   # normalised mean absolute error
   nmae <- mean(abs((O - P)/O), na.rm = TRUE)
-  
+
   qual <- data.frame(rmse = rmse, nse = nse, r = r, bias = bias, mae = mae, nmae = nmae)
-  
+
   return(qual)
 }
 
@@ -147,7 +147,7 @@ thm <- theme_pubr(base_size = 17) + grids()
 
 config_file <- "LakeEnsemblR.yaml"
 
-model <- c("GLM", "GOTM", "Simstrat", "FLake")
+model <- c("FLake","GLM", "GOTM", "Simstrat")#, "FLake")
 
 # Import the LER output into your workspace
 ens_out <- paste0("output/", get_yaml_value(config_file, "output", "file"),
@@ -173,6 +173,6 @@ depth_qual <- reshape2::melt(depth_qual, id.vars = c("Depth", "Metric"))
 depth_qual <- depth_qual[, -3]
 colnames(depth_qual) <- c("Depth", "Metric", "Value", "Period", "Model")
 
-palm_depth <- ggplot(depth_qual) + geom_line(aes(x = Depth, y = Value, col = Period)) +
+palm_depth <- ggplot(depth_qual) + geom_line(aes(x = Depth, y = Value), size = 1.5) +
   coord_flip() + facet_grid(Model ~ Metric, scales = "free_x")  + scale_x_reverse() + thm +
   xlab("Depth (m)")
